@@ -473,7 +473,6 @@
     </div>
 
     <script>
-        // مصفوفة الأسئلة الـ 15 المتقدمة (كل سؤال علامتان = 30 علامة) مع تحديد النص الصحيح لكل سؤال بدقة
         const rawQuestions = [{
             id: 'q1',
             text: "أي من الهجمات التالية يعتمد بشكل أساسي على التلاعب بالنفس البشرية واستغلال \"حالة الاستعجال\" أو \"الخوف\" ولكن دون استخدام أي وسيلة رقمية في بداية الهجوم (مثل المكالمات الهاتفية أو التفاعل وجهاً لوجه) لجمع معلومات حساسة؟",
@@ -626,7 +625,6 @@
             correctText: "PCI-DSS"
         }];
 
-        // دالة الخلط العشوائي (Fisher-Yates Shuffle)
         function shuffle(array) {
             let currentIndex = array.length,
                 randomIndex;
@@ -649,11 +647,11 @@
 
             shuffledQList.forEach((q, idx) => {
                         let shuffledOptions = shuffle(q.options);
-                        let correctIdx = shuffledOptions.indexOf(q.correctText);
 
+                        // حفظ نص الإجابة الصحيحة صريحاً بدلاً من الاعتماد المطلق على مؤشر الرقم لتفادي أي خطأ بالتقاط المطابقة
                         processedQuestions.push({
                             id: q.id,
-                            correctIndex: correctIdx
+                            correctText: q.correctText.trim()
                         });
 
                         mcqHTML += `
@@ -662,7 +660,7 @@
                         <div class="options-list">
                             ${shuffledOptions.map((opt, oIdx) => `
                                 <label class="option-item">
-                                    <input type="radio" name="${q.id}" value="${oIdx}">
+                                    <input type="radio" name="${q.id}" value="${opt.replace(/"/g, '&quot;')}">
                                     ${opt}
                                 </label>
                             `).join('')}
@@ -714,7 +712,8 @@
             let finalScore = 0;
             processedQuestions.forEach(q => {
                 const selected = document.querySelector(`input[name="${q.id}"]:checked`);
-                if (selected && parseInt(selected.value) === q.correctIndex) {
+                // مقارنة النص الحرفي المختار مع الإجابة الصحيحة بدقة تامة لتفادي أي نقص في الدرجات
+                if (selected && selected.value.trim() === q.correctText) {
                     finalScore += 2;
                 }
             });
