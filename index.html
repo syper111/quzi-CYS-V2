@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>امتحان الأمن السيبراني المتقدم - معلومات عامة متقدمة</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+         :root {
+            --bg-color: #0a0a12;
+            --card-bg: #121220;
+            --neon-cyan: #00f3ff;
+            --neon-pink: #ff007f;
+            --neon-purple: #9d00ff;
+            --neon-green: #39ff14;
+            --text-color: #ffffff;
+            --text-dim: #a0a0c0;
+            --error-red: #ff3366;
+            --gold: #ffd700;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Tajawal', sans-serif;
+        }
+        
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            background-image: radial-gradient(circle at 15% 15%, rgba(0, 243, 255, 0.08) 0%, transparent 40%), radial-gradient(circle at 85% 85%, rgba(255, 0, 127, 0.08) 0%, transparent 40%);
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 950px;
+            background: var(--card-bg);
+            border: 2px solid var(--neon-purple);
+            box-shadow: 0 0 25px rgba(157, 0, 255, 0.3), inset 0 0 15px rgba(157, 0, 255, 0.1);
+            border-radius: 20px;
+            padding: 35px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .teacher-btn {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background: transparent;
+            border: 1px solid var(--neon-cyan);
+            color: var(--neon-cyan);
+            padding: 6px 15px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: 0.3s;
+            box-shadow: 0 0 8px rgba(0, 243, 255, 0.3);
+            z-index: 10;
+        }
+        
+        .teacher-btn:hover {
+            background: var(--neon-cyan);
+            color: #000;
+            box-shadow: 0 0 15px var(--neon-cyan);
+        }
+        
+        #welcome-screen {
+            text-align: center;
+            padding: 40px 10px;
+        }
+        
+        h1 {
+            color: var(--neon-cyan);
+            font-size: 2.1rem;
+            margin-bottom: 15px;
+            text-shadow: 0 0 10px var(--neon-cyan);
+        }
+        
+        .sub-title {
+            color: var(--text-dim);
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+        }
+        
+        .author-tag {
+            color: var(--gold);
+            font-weight: bold;
+            margin-bottom: 30px;
+            font-size: 1.2rem;
+            text-shadow: 0 0 5px rgba(255, 215, 0, 0.4);
+        }
+        
+        .input-group {
+            margin-bottom: 25px;
+        }
+        
+        .input-group label {
+            display: block;
+            margin-bottom: 10px;
+            color: var(--neon-pink);
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+        
+        .input-group input {
+            width: 80%;
+            max-width: 350px;
+            padding: 12px 20px;
+            background: #1a1a2e;
+            border: 2px solid var(--neon-purple);
+            border-radius: 10px;
+            color: #fff;
+            font-size: 1.1rem;
+            outline: none;
+            text-align: center;
+            transition: 0.3s;
+        }
+        
+        .input-group input:focus {
+            border-color: var(--neon-cyan);
+            box-shadow: 0 0 15px var(--neon-cyan);
+        }
+        
+        .btn-neon {
+            background: linear-gradient(45deg, var(--neon-purple), var(--neon-pink));
+            border: none;
+            color: #fff;
+            padding: 12px 40px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: 0.3s;
+            box-shadow: 0 0 15px rgba(255, 0, 127, 0.4);
+        }
+        
+        .btn-neon:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 25px var(--neon-pink);
+        }
+        
+        #exam-screen {
+            display: none;
+        }
+        
+        .exam-header {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding-bottom: 15px;
+            margin-bottom: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .student-info-tag {
+            color: var(--neon-cyan);
+            font-size: 1.1rem;
+            font-weight: bold;
+        }
+        
+        .exam-info-tag {
+            background: rgba(255, 0, 127, 0.2);
+            color: var(--neon-pink);
+            padding: 5px 12px;
+            border-radius: 15px;
+            border: 1px solid var(--neon-pink);
+            font-size: 0.9rem;
+        }
+        
+        .q-box {
+            background: #18182a;
+            border: 1px solid #2a2a48;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            transition: 0.3s;
+        }
+        
+        .q-box.error-unanswered {
+            border: 2px solid var(--error-red) !important;
+            box-shadow: 0 0 15px var(--error-red) !important;
+            animation: pulse-red 1.5s infinite;
+        }
+        
+        @keyframes pulse-red {
+            0% {
+                box-shadow: 0 0 5px var(--error-red);
+            }
+            50% {
+                box-shadow: 0 0 20px var(--error-red);
+            }
+            100% {
+                box-shadow: 0 0 5px var(--error-red);
+            }
+        }
+        
+        .q-title {
+            font-size: 1.05rem;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #fff;
+            line-height: 1.6;
+        }
+        
+        .options-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .option-item {
+            display: flex;
+            align-items: center;
+            background: #202038;
+            padding: 12px 18px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.2s;
+            border: 1px solid transparent;
+            font-size: 1.05rem;
+        }
+        
+        .option-item:hover {
+            background: #2a2a4a;
+            border-color: var(--neon-purple);
+        }
+        
+        .option-item input[type="radio"] {
+            margin-left: 12px;
+            accent-color: var(--neon-pink);
+            width: 18px;
+            height: 18px;
+        }
+        
+        #final-screen {
+            display: none;
+            text-align: center;
+            padding: 50px 20px;
+        }
+        
+        .success-icon {
+            font-size: 4rem;
+            color: var(--neon-green);
+            text-shadow: 0 0 20px var(--neon-green);
+            margin-bottom: 20px;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(5px);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        
+        .modal-content {
+            background: var(--card-bg);
+            border: 2px solid var(--neon-cyan);
+            border-radius: 15px;
+            padding: 25px;
+            width: 95%;
+            max-width: 950px;
+            max-height: 85vh;
+            overflow-y: auto;
+            box-shadow: 0 0 30px var(--neon-cyan);
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            margin-bottom: 15px;
+        }
+        
+        th,
+        td {
+            padding: 10px;
+            border: 1px solid #333;
+            text-align: center;
+        }
+        
+        th {
+            background: var(--neon-purple);
+            color: #fff;
+        }
+        
+        td {
+            background: #18182a;
+        }
+        
+        .dashboard-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 15px;
+        }
+        
+        .dash-btn {
+            background: #1a1a2e;
+            border: 1px solid var(--neon-cyan);
+            color: var(--neon-cyan);
+            padding: 8px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+        
+        .dash-btn:hover {
+            background: var(--neon-cyan);
+            color: #000;
+            box-shadow: 0 0 10px var(--neon-cyan);
+        }
+        
+        .dash-btn.danger {
+            border-color: var(--error-red);
+            color: var(--error-red);
+        }
+        
+        .dash-btn.danger:hover {
+            background: var(--error-red);
+            color: #fff;
+            box-shadow: 0 0 10px var(--error-red);
+        }
+        
+        .close-modal {
+            background: var(--neon-pink);
+            color: #fff;
+            border: none;
+            padding: 6px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+
+    <!-- ربط Firebase Realtime Database -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyDlAF2SrTjnDkSzIoXV2NYqpBvaiFBAoUc",
+            authDomain: "sdgedrfgbdrf.firebaseapp.com",
+            databaseURL: "https://sdgedrfgbdrf-default-rtdb.firebaseio.com",
+            projectId: "sdgedrfgbdrf",
+            storageBucket: "sdgedrfgbdrf.firebasestorage.app",
+            messagingSenderId: "104456673240",
+            appId: "1:104456673240:web:b60d12e0102849975884ad",
+            measurementId: "G-S6L34KMQCL"
+        };
+
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }
+        const database = firebase.database();
+
+        function saveToFirebase(record) {
+            database.ref('cybersecurity_advanced_results').push(record)
+                .catch(err => console.error("خطأ أثناء الحفظ:", err));
+        }
+
+        function getResultsFromFirebase(callback) {
+            database.ref('cybersecurity_advanced_results').once('value')
+                .then(snapshot => {
+                    const data = snapshot.val();
+                    let list = [];
+                    if (data) {
+                        list = Object.keys(data).map(key => ({
+                            id: key,
+                            ...data[key]
+                        }));
+                    }
+                    callback(list);
+                })
+                .catch(err => {
+                    console.error("خطأ في جلب البيانات:", err);
+                    callback([]);
+                });
+        }
+
+        function clearFirebaseData(callback) {
+            database.ref('cybersecurity_advanced_results').remove()
+                .then(() => callback(true))
+                .catch(err => callback(false));
+        }
+    </script>
+</head>
+
+<body>
+
+    <div class="container">
+        <button id="teacher-main-btn" class="teacher-btn" onclick="openTeacherDashboard()">لوحة المعلم 🔒</button>
+
+        <div id="welcome-screen">
+            <h1>امتحان الأمن السيبراني المتقدم</h1>
+            <p class="sub-title">معلومات عامة متقدمة (30 علامة - كل سؤال علامتان)</p>
+            <div class="author-tag">إعداد: المهندس إبراهيم المدادحه</div>
+
+            <div class="input-group">
+                <label for="student-name">الرجاء إدخال اسم الطالب/ة الثلاثي:</label>
+                <input type="text" id="student-name" placeholder="اكتب/ي اسمك هنا..." autocomplete="off">
+            </div>
+
+            <button class="btn-neon" onclick="startExam()">بدء الامتحان 🚀</button>
+        </div>
+
+        <div id="exam-screen">
+            <div class="exam-header">
+                <div class="student-info-tag">الطالب/ة: <span id="display-name"></span></div>
+                <div class="exam-info-tag">العلامة الكلية: 30 درجة</div>
+            </div>
+
+            <form id="quiz-form">
+                <div id="mcq-container"></div>
+
+                <div style="text-align: center; margin-top: 35px;">
+                    <button type="button" class="btn-neon" onclick="submitExam()">تسليم الورقة الامتحانية 📤</button>
+                </div>
+            </form>
+        </div>
+
+        <div id="final-screen">
+            <div class="success-icon">✓</div>
+            <h2 style="color: var(--neon-green); text-shadow: 0 0 10px var(--neon-green); margin-bottom: 15px;">تم إرسال إجاباتك بنجاح!</h2>
+            <p style="color: var(--text-dim); font-size: 1.15rem; line-height: 1.8;">شكراً لك/ِ. تم حفظ ورقة إجابتك في السجل الخاص بالمعلم بنجاح.</p>
+        </div>
+    </div>
+
+    <!-- لوحة المعلم Modal -->
+    <div class="modal" id="teacher-modal">
+        <div class="modal-content">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                <h3 style="color: var(--neon-cyan);">لوحة المعلم - سجل نتائج امتحان الأمن السيبراني المتقدم</h3>
+                <button class="close-modal" onclick="closeTeacherDashboard()">إغلاق ✖</button>
+            </div>
+
+            <table id="results-table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>اسم الطالب/ة</th>
+                        <th>العلامة النهائية (من 30)</th>
+                        <th>النسبة المئوية</th>
+                        <th>التاريخ والوقت</th>
+                    </tr>
+                </thead>
+                <tbody id="results-body">
+                    <tr>
+                        <td colspan="5">جاري التحميل...</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="dashboard-actions">
+                <button class="dash-btn" onclick="loadTeacherData()">🔄 تحديث البيانات</button>
+                <button class="dash-btn danger" onclick="deleteAllData()">🗑️ حذف جميع السجلات</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // مصفوفة الأسئلة الـ 15 المتقدمة (كل سؤال علامتان = 30 علامة) مع تحديد النص الصحيح لكل سؤال بدقة
+        const rawQuestions = [{
+            id: 'q1',
+            text: "أي من الهجمات التالية يعتمد بشكل أساسي على التلاعب بالنفس البشرية واستغلال \"حالة الاستعجال\" أو \"الخوف\" ولكن دون استخدام أي وسيلة رقمية في بداية الهجوم (مثل المكالمات الهاتفية أو التفاعل وجهاً لوجه) لجمع معلومات حساسة؟",
+            options: [
+                "Spear Phishing",
+                "Pretexting",
+                "Vishing",
+                "Quid Pro Quo"
+            ],
+            correctText: "Pretexting"
+        }, {
+            id: 'q2',
+            text: "عندما يحاول مهاجم استغلال ثغرة أمنية في تطبيق ويب عبر إدخال أكواد ضارة يتم تنفيذها على متصفح الضحية وليس على الخادم مباشرة، فإن نوع الثغرة الأغلب هنا هو:",
+            options: [
+                "Cross-Site Scripting (XSS)",
+                "SQL Injection (SQLi)",
+                "Remote Code Execution (RCE)",
+                "Server-Side Request Forgery (SSRF)"
+            ],
+            correctText: "Cross-Site Scripting (XSS)"
+        }, {
+            id: 'q3',
+            text: "ما هو المبدأ الأمني الذي يقضي بمنح المستخدمين أو العمليات الحد الأدنى فقط من الصلاحيات اللازمة لأداء مهامهم المطلوبة، وتضييق نطاق الوصول قدر الإمكان؟",
+            options: [
+                "Segregation of Duties",
+                "Defense in Depth",
+                "Fail-Safe Defaults",
+                "Least Privilege"
+            ],
+            correctText: "Least Privilege"
+        }, {
+            id: 'q4',
+            text: "في مجال التشفير (Cryptography)، ما هو الفرق الأساسي بين خوارزميات التشفير المتماثل (Symmetric) وغير المتماثل (Asymmetric) من حيث أداء وكفاءة نقل البيانات الضخمة؟",
+            options: [
+                "المتماثل أسرع وأكثر كفاءة للحجم الكبير، بينما غير المتماثل أبطأ ويُستخدم غالباً لتبادل المفاتيح أو التوقيع الرقمي.",
+                "غير المتماثل أسرع بكثير في تشفير الملفات الضخمة بسبب اعتماده على الدوال الرياضية البسيطة.",
+                "المتماثل أبطأ بكثير لأنه يستخدم مفتاحين، وغير المتماثل أسرع.",
+                "لا توجد فروق جوهرية في الأداء، والفرق يكمن فقط في طول مفتاح التشفير."
+            ],
+            correctText: "المتماثل أسرع وأكثر كفاءة للحجم الكبير، بينما غير المتماثل أبطأ ويُستخدم غالباً لتبادل المفاتيح أو التوقيع الرقمي."
+        }, {
+            id: 'q5',
+            text: "إذا تعرض خادم لمجموعة من الطلبات الهائلة التي تستهلك مصادر الذاكرة والمعالج (RAM & CPU) بشكل يجعله عاجزاً عن تلبية طلبات المستخدمين الشرعيين، ولكن هذه الطلبات مصدرها مئات الآلاف من الأجهزة المختلفة حول العالم، يُعرف هذا الهجوم بـ:",
+            options: [
+                "SQL Injection Attack",
+                "Distributed Denial of Service (DDoS)",
+                "Man-in-the-Middle Attack (MitM)",
+                "Brute Force Attack"
+            ],
+            correctText: "Distributed Denial of Service (DDoS)"
+        }, {
+            id: 'q6',
+            text: "ما هي الغاية الأساسية من استخدام بروتوكول مثل `DNSSEC` (Domain Name System Security Extensions) في البنية التحتية لشبكة الإنترنت؟",
+            options: [
+                "منع هجمات حجب الخدمات (DDoS) الموجهة ضد خوادم النطاقات (DNS Servers).",
+                "تشفير تصفح المستخدم بالكامل وإخفاء المواقع التي يزورها عن مزود الخدمة.",
+                "حماية استعلامات أسماء النطاقات من التلاعب والتزوير (DNS Spoofing/Cache Poisoning) عبر توقيع رقمي.",
+                "تسريع عملية جلب عناوين الويب وتحسين زمن الاستجابة (Latency)."
+            ],
+            correctText: "حماية استعلامات أسماء النطاقات من التلاعب والتزوير (DNS Spoofing/Cache Poisoning) عبر توقيع رقمي."
+        }, {
+            id: 'q7',
+            text: "أي من الهجمات التالية يقوم فيه المهاجم باعتراض الاتصال بين طرفين (أو التظاهر بأنه أحدهما للآخر) دون علم أي منهما، مما يتيح له قراءة أو تعديل البيانات المتبادلة؟",
+            options: [
+                "Buffer Overflow",
+                "Man-in-the-Middle (MitM)",
+                "Zero-Day Exploit",
+                "Cross-Site Request Forgery (CSRF)"
+            ],
+            correctText: "Man-in-the-Middle (MitM)"
+        }, {
+            id: 'q8',
+            text: "ماذا يُقصد بمصطلح \"Zero-Day Vulnerability\" في عالم الأمن السيبراني؟",
+            options: [
+                "ثغرة أمنية تم اكتشافها وإصدار تصحيح (Patch) لها في نفس اليوم.",
+                "هجوم سيبراني يفشل خلال أقل من يوم واحد بفضل جدران الحماية.",
+                "ثغرة أمنية معروفة للمطورين ولكن لم يتم استغلالها بعد من قبل أي قراصنة.",
+                "ثغرة أمنية في البرمجيات غير معروفة للمطورين أو الجهة المالكة، وبالتالي لا يوجد لها تصحيح وقت اكتشافها من قبل المهاجمين."
+            ],
+            correctText: "ثغرة أمنية في البرمجيات غير معروفة للمطورين أو الجهة المالكة، وبالتالي لا يوجد لها تصحيح وقت اكتشافها من قبل المهاجمين."
+        }, {
+            id: 'q9',
+            text: "في أنظمة المصادقة الثنائية (2FA)، أي من الطرق التالية يعتبر الأكثر أماناً ومقاومة لهجمات التصيد الاحصيائي المتقدمة (Advanced Phishing)؟",
+            options: [
+                "مفاتيح الأمان الفيزيائية التي تدعم بروتوكول FIDO2 / WebAuthn (مثل YubiKey).",
+                "رموز التحقق المرسلة عبر رسائل النص القصيرة (SMS OTP).",
+                "تطبيقات المصادقة مثل Google Authenticator أو Microsoft Authenticator.",
+                "إشعارات الدفع (Push Notifications) على الهواتف الذكية."
+            ],
+            correctText: "مفاتيح الأمان الفيزيائية التي تدعم بروتوكول FIDO2 / WebAuthn (مثل YubiKey)."
+        }, {
+            id: 'q10',
+            text: "أي من الآليات التالية تضمن \"سلامة البيانات\" (Integrity) وتمنع تعديلها أو العبث بها أثناء انتقالها عبر الشبكة؟",
+            options: [
+                "بروتوكولات المصادقة الثنائية (2FA).",
+                "دوال التجزئة والتوقيع الرقمي (Cryptographic Hash Functions & Digital Signatures).",
+                "خوارزميات التشفير المتماثل مثل AES.",
+                "جدران الحماية المتقدمة (Next-Gen Firewalls)."
+            ],
+            correctText: "دوال التجزئة والتوقيع الرقمي (Cryptographic Hash Functions & Digital Signatures)."
+        }, {
+            id: 'q11',
+            text: "ما هو الغرض الرئيسي من استخدام تقنية \"Honeypot\" في المؤسسات والشبكات الأمنية؟",
+            options: [
+                "تسريع حركة مرور البيانات وتخزين الملفات المؤقتة.",
+                "تشفير قواعد البيانات الحساسة لحمايتها من السرقة.",
+                "جذب المهاجمين واكتشاف أساليبهم التخريبية وعزلهم عن الأنظمة الحقيقية.",
+                "فحص الشيفرات البرمجية للتطبيقات بحثاً عن الأخطاء الإملائية."
+            ],
+            correctText: "جذب المهاجمين واكتشاف أساليبهم التخريبية وعزلهم عن الأنظمة الحقيقية."
+        }, {
+            id: 'q12',
+            text: "ما الفرق الجوهري بين \"البرمجيات الخبيثة القابلة للتكاثر الذاتي والتنقل عبر الشبكات بمفردها\" (Worm) و\"فيروس الحاسوب التقليدي\" (Virus)؟",
+            options: [
+                "الفيروس يستهدف الهواتف فقط، بينما الدودة تستهدف الخوادم فقط.",
+                "الفيروس يدمر الأجهزة تماماً، بينما الدودة تسرق البيانات فقط.",
+                "لا يوجد أي فرق تقني بينهما، والمصطلحات مترادمان تماماً.",
+                "الفيروس يحتاج إلى تفاعل بشري لتشغيله وانتشاره (مثل فتح ملف مرفق)، بينما الدودة (Worm) تتكاثر وتنتقل عبر الشبكة تلقائياً دون تدخل بشري."
+            ],
+            correctText: "الفيروس يحتاج إلى تفاعل بشري لتشغيله وانتشاره (مثل فتح ملف مرفق)، بينما الدودة (Worm) تتكاثر وتنتقل عبر الشبكة تلقائياً دون تدخل بشري."
+        }, {
+            id: 'q13',
+            text: "عندما يقوم مهاجم بإرسال بيانات تفوق حجم الذاكرة المخصصة لها في برنامج معين، مما يؤدي إلى الكتابة فوق مناطق أخرى في الذاكرة العشوائية وربما تنفيذ تعليمات برمجية خبيثة، يُسمى هذا النوع من الثغرات بـ:",
+            options: [
+                "Buffer Overflow",
+                "SQL Injection",
+                "Directory Traversal",
+                "Session Hijacking"
+            ],
+            correctText: "Buffer Overflow"
+        }, {
+            id: 'q14',
+            text: "ماذا يُقصد بمفهوم \"Security through Obscurity\" (الأمان عبر الإخفاء أو الغموض) في التصميم أمنياً؟",
+            options: [
+                "إخفاء البيانات الشخصية للمستخدمين لمنع هجمات الهندسة الاجتماعية.",
+                "الاعتماد على إبقاء نظام الحماية أو التصميم سرياً كخط دفاع أساسي ووحيد، وهو نهج مرفوض ومحفوف بالمخاطر.",
+                "الاعتماد على خوارزميات تشفير قوية جداً ومكشوفة للعلماء.",
+                "تشفير حركة مرور الشبكة باستخدام بروتوكولات مجهولة المصدر."
+            ],
+            correctText: "الاعتماد على إبقاء نظام الحماية أو التصميم سرياً كخط دفاع أساسي ووحيد، وهو نهج مرفوض ومحفوف بالمخاطر."
+        }, {
+            id: 'q15',
+            text: "أي من الأنظمة أو المعايير التالية يهتم بشكل أساسي بحماية وتنظيم التعامل مع بيانات البطاقات الائتمانية والمالية للعملاء لضمان بيئة دفع آمنة؟",
+            options: [
+                "HIPAA",
+                "GDPR",
+                "PCI-DSS",
+                "ISO 27001"
+            ],
+            correctText: "PCI-DSS"
+        }];
+
+        // دالة الخلط العشوائي (Fisher-Yates Shuffle)
+        function shuffle(array) {
+            let currentIndex = array.length,
+                randomIndex;
+            let arrCopy = JSON.parse(JSON.stringify(array));
+            while (currentIndex !== 0) {
+                randomIndex = Math.floor(Math.random() * currentIndex);
+                currentIndex--;
+                [arrCopy[currentIndex], arrCopy[randomIndex]] = [arrCopy[randomIndex], arrCopy[currentIndex]];
+            }
+            return arrCopy;
+        }
+
+        let processedQuestions = [];
+
+        function renderExam() {
+            let shuffledQList = shuffle(rawQuestions);
+            processedQuestions = [];
+
+            let mcqHTML = "";
+
+            shuffledQList.forEach((q, idx) => {
+                        let shuffledOptions = shuffle(q.options);
+                        let correctIdx = shuffledOptions.indexOf(q.correctText);
+
+                        processedQuestions.push({
+                            id: q.id,
+                            correctIndex: correctIdx
+                        });
+
+                        mcqHTML += `
+                    <div class="q-box" id="card-${q.id}">
+                        <div class="q-title">${idx + 1}. ${q.text} <span style="color: var(--gold); font-size: 0.85rem;">(علامتان)</span></div>
+                        <div class="options-list">
+                            ${shuffledOptions.map((opt, oIdx) => `
+                                <label class="option-item">
+                                    <input type="radio" name="${q.id}" value="${oIdx}">
+                                    ${opt}
+                                </label>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+            });
+
+            document.getElementById('mcq-container').innerHTML = mcqHTML;
+        }
+
+        let studentName = "";
+
+        function startExam() {
+            const nameInput = document.getElementById('student-name');
+            if (nameInput.value.trim() === "") {
+                nameInput.style.borderColor = "var(--error-red)";
+                nameInput.focus();
+                return;
+            }
+            studentName = nameInput.value.trim();
+            document.getElementById('display-name').innerText = studentName;
+            
+            document.getElementById('teacher-main-btn').style.display = 'none';
+            document.getElementById('welcome-screen').style.display = 'none';
+            document.getElementById('exam-screen').style.display = 'block';
+            window.scrollTo(0, 0);
+        }
+
+        function submitExam() {
+            document.querySelectorAll('.q-box').forEach(card => card.classList.remove('error-unanswered'));
+
+            let unansweredCard = null;
+
+            for (let q of processedQuestions) {
+                const selected = document.querySelector(`input[name="${q.id}"]:checked`);
+                if (!selected) {
+                    unansweredCard = document.getElementById(`card-${q.id}`);
+                    break;
+                }
+            }
+
+            if (unansweredCard) {
+                unansweredCard.classList.add('error-unanswered');
+                unansweredCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                return;
+            }
+
+            let finalScore = 0;
+            processedQuestions.forEach(q => {
+                const selected = document.querySelector(`input[name="${q.id}"]:checked`);
+                if (selected && parseInt(selected.value) === q.correctIndex) {
+                    finalScore += 2;
+                }
+            });
+
+            let percentage = ((finalScore / 30) * 100).toFixed(1);
+
+            const record = {
+                name: studentName,
+                totalScore: finalScore,
+                percentage: percentage + "%",
+                date: new Date().toLocaleString('ar-JO')
+            };
+
+            saveToFirebase(record);
+
+            document.getElementById('exam-screen').style.display = 'none';
+            document.getElementById('final-screen').style.display = 'block';
+            window.scrollTo(0, 0);
+        }
+
+        function openTeacherDashboard() {
+            const pass = prompt("الرجاء إدخال رمز دخول لوحة المعلم:");
+            if (pass === "8000") {
+                document.getElementById('teacher-modal').style.display = 'flex';
+                loadTeacherData();
+            } else if (pass !== null) {
+                alert("رمز الدخول غير صحيح!");
+            }
+        }
+
+        function closeTeacherDashboard() {
+            document.getElementById('teacher-modal').style.display = 'none';
+        }
+
+        function loadTeacherData() {
+            const tbody = document.getElementById('results-body');
+            tbody.innerHTML = `<tr><td colspan="5">جاري جلب النتائج من قاعدة البيانات...</td></tr>`;
+
+            getResultsFromFirebase((results) => {
+                if (results.length === 0) {
+                    tbody.innerHTML = `<tr><td colspan="5">لا توجد نتائج مسجلة حتى الآن.</td></tr>`;
+                    return;
+                }
+
+                tbody.innerHTML = results.map((r, i) => `
+                    <tr>
+                        <td>${i + 1}</td>
+                        <td><b>${r.name}</b></td>
+                        <td style="color: var(--neon-cyan); font-weight: bold;">${r.totalScore} / 30</td>
+                        <td style="color: var(--neon-green); font-weight: bold;">${r.percentage}</td>
+                        <td>${r.date}</td>
+                    </tr>
+                `).join('');
+            });
+        }
+
+        function deleteAllData() {
+            if (confirm("هل أنت متأكد من رغبتك في حذف جميع سجلات الطلاب/الطالبات نهائياً؟")) {
+                clearFirebaseData((success) => {
+                    if (success) {
+                        loadTeacherData();
+                    } else {
+                        alert("حدث خطأ أثناء الحذف.");
+                    }
+                });
+            }
+        }
+
+        window.onload = renderExam;
+    </script>
+</body>
+
+</html>
