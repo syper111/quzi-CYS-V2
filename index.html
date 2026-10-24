@@ -482,7 +482,7 @@
                 "Vishing",
                 "Quid Pro Quo"
             ],
-            correctText: "Pretexting"
+            correctText: "Vishing"
         }, {
             id: 'q2',
             text: "عندما يحاول مهاجم استغلال ثغرة أمنية في تطبيق ويب عبر إدخال أكواد ضارة يتم تنفيذها على متصفح الضحية وليس على الخادم مباشرة، فإن نوع الثغرة الأغلب هنا هو:",
@@ -647,11 +647,11 @@
 
             shuffledQList.forEach((q, idx) => {
                         let shuffledOptions = shuffle(q.options);
+                        let correctIdx = shuffledOptions.indexOf(q.correctText);
 
-                        // حفظ نص الإجابة الصحيحة صريحاً بدلاً من الاعتماد المطلق على مؤشر الرقم لتفادي أي خطأ بالتقاط المطابقة
                         processedQuestions.push({
                             id: q.id,
-                            correctText: q.correctText.trim()
+                            correctIndex: correctIdx
                         });
 
                         mcqHTML += `
@@ -660,7 +660,7 @@
                         <div class="options-list">
                             ${shuffledOptions.map((opt, oIdx) => `
                                 <label class="option-item">
-                                    <input type="radio" name="${q.id}" value="${opt.replace(/"/g, '&quot;')}">
+                                    <input type="radio" name="${q.id}" value="${oIdx}">
                                     ${opt}
                                 </label>
                             `).join('')}
@@ -712,8 +712,7 @@
             let finalScore = 0;
             processedQuestions.forEach(q => {
                 const selected = document.querySelector(`input[name="${q.id}"]:checked`);
-                // مقارنة النص الحرفي المختار مع الإجابة الصحيحة بدقة تامة لتفادي أي نقص في الدرجات
-                if (selected && selected.value.trim() === q.correctText) {
+                if (selected && parseInt(selected.value) === q.correctIndex) {
                     finalScore += 2;
                 }
             });
